@@ -4,14 +4,8 @@ import { DropZone } from "./components/DropZone";
 import { ImagePreview } from "./components/ImagePreview";
 import { CompressionSettings, ProcessedImage, Preset } from "./types";
 import { processImage } from "./utils/imageProcessor";
-import {
-  Download,
-  Trash2,
-  Image as ImageIcon,
-  Menu,
-  Heart,
-} from "lucide-react";
-import { motion, AnimatePresence } from "motion/react";
+import { Download, Trash2, Image as ImageIcon, Menu } from "lucide-react";
+import { AnimatePresence } from "motion/react";
 
 const DEFAULT_SETTINGS: CompressionSettings = {
   format: "webp",
@@ -36,15 +30,15 @@ const PRESETS: Preset[] = [
     },
   },
   {
-    id: "instagram-square",
-    name: "Instagram Square",
+    id: "border-preset",
+    name: "Border and DC1 Preset",
     settings: {
       format: "jpeg",
-      quality: 90,
-      longestSide: 1350,
-      cropRatio: "1:1",
-      hasBorder: false,
-      applyLrPreset: false,
+      quality: 95,
+      longestSide: 2048,
+      cropRatio: "original",
+      hasBorder: true,
+      applyLrPreset: true,
     },
   },
   {
