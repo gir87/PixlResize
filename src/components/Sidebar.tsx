@@ -217,6 +217,30 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${settings.applyLrPreset ? 'left-6' : 'left-1'}`} />
             </div>
           </button>
+
+          {settings.applyLrPreset && (
+            <div className="space-y-2">
+              <div className="flex justify-between">
+                <label className="text-sm font-medium text-zinc-300">Temperature</label>
+                <span className="text-xs font-mono text-zinc-500">
+                  {settings.lrWarmth > 0 ? `+${settings.lrWarmth}` : settings.lrWarmth}
+                </span>
+              </div>
+              <input
+                type="range"
+                min="-100"
+                max="100"
+                value={settings.lrWarmth}
+                onChange={(e) => setSettings({ ...settings, lrWarmth: parseInt(e.target.value) })}
+                className="w-full h-1.5 rounded-lg appearance-none cursor-pointer accent-indigo-500"
+                style={{ background: 'linear-gradient(to right, #93c5fd, #fbbf24)' }}
+              />
+              <div className="flex justify-between text-[10px] text-zinc-600">
+                <span>Cool</span>
+                <span>Warm</span>
+              </div>
+            </div>
+          )}
         </section>
 
         <section className="space-y-4">

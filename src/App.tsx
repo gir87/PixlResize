@@ -14,6 +14,7 @@ const DEFAULT_SETTINGS: CompressionSettings = {
   cropRatio: "original",
   hasBorder: false,
   applyLrPreset: false,
+  lrWarmth: 0,
 };
 
 const PRESETS: Preset[] = [
@@ -27,6 +28,7 @@ const PRESETS: Preset[] = [
       cropRatio: "original",
       hasBorder: false,
       applyLrPreset: false,
+      lrWarmth: 0,
     },
   },
   {
@@ -39,6 +41,7 @@ const PRESETS: Preset[] = [
       cropRatio: "original",
       hasBorder: true,
       applyLrPreset: true,
+      lrWarmth: 30,
     },
   },
   {
@@ -51,6 +54,7 @@ const PRESETS: Preset[] = [
       cropRatio: "4:5",
       hasBorder: true,
       applyLrPreset: false,
+      lrWarmth: 0,
     },
   },
   {
@@ -63,6 +67,7 @@ const PRESETS: Preset[] = [
       cropRatio: "19:6",
       hasBorder: false,
       applyLrPreset: false,
+      lrWarmth: 0,
     },
   },
 ];

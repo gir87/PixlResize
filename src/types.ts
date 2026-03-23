@@ -9,6 +9,7 @@ export interface CompressionSettings {
   cropRatio: CropRatio;
   hasBorder: boolean;
   applyLrPreset: boolean;
+  lrWarmth: number; // -100 (cool) to +100 (warm), 0 = neutral
 }
 
 export interface ProcessedImage {

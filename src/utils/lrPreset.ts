@@ -88,11 +88,13 @@ function hue2rgb(p: number, q: number, t: number): number {
 /**
  * Apply the DC1 Lightroom preset to all pixels on the given canvas context.
  * Must be called after drawImage and before any border fill.
+ * @param warmth - Temperature shift: -100 (cool/blue) to +100 (warm/orange). 0 = neutral.
  */
 export function applyDC1Preset(
   ctx: CanvasRenderingContext2D,
   width: number,
   height: number,
+  warmth = 0,
 ): void {
   const imageData = ctx.getImageData(0, 0, width, height);
   const data = imageData.data;
@@ -133,6 +135,13 @@ export function applyDC1Preset(
       r = Math.round(hue2rgb(p, q, newH + 1 / 3) * 255);
       g = Math.round(hue2rgb(p, q, newH) * 255);
       b = Math.round(hue2rgb(p, q, newH - 1 / 3) * 255);
+    }
+
+    // Step 3: white balance (temperature) shift
+    if (warmth !== 0) {
+      const shift = warmth * 0.3;
+      r = Math.max(0, Math.min(255, r + shift));
+      b = Math.max(0, Math.min(255, b - shift));
     }
 
     data[i]     = r;

@@ -71,7 +71,7 @@ export const processImage = async (
       imgCtx.drawImage(img, sX, sY, sWidth, sHeight, 0, 0, imgCanvas.width, imgCanvas.height);
 
       if (settings.applyLrPreset) {
-        applyDC1Preset(imgCtx, imgCanvas.width, imgCanvas.height);
+        applyDC1Preset(imgCtx, imgCanvas.width, imgCanvas.height, settings.lrWarmth);
       }
 
       // Final canvas: add border if requested.
