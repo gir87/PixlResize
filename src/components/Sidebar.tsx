@@ -7,6 +7,7 @@ import {
   Heart,
   Coffee,
   Square,
+  Palette,
 } from "lucide-react";
 import { CompressionSettings, OutputFormat, Preset, CropRatio } from "../types";
 
@@ -192,6 +193,28 @@ export const Sidebar: React.FC<SidebarProps> = ({
             <span className="text-sm font-medium">White Border (2%)</span>
             <div className={`w-10 h-5 rounded-full relative transition-colors ${settings.hasBorder ? 'bg-indigo-600' : 'bg-zinc-800'}`}>
               <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${settings.hasBorder ? 'left-6' : 'left-1'}`} />
+            </div>
+          </button>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <Palette className="w-4 h-4" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider">Colour Grade</h2>
+          </div>
+          <button
+            onClick={() => setSettings({ ...settings, applyLrPreset: !settings.applyLrPreset })}
+            className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all ${settings.applyLrPreset
+                ? 'bg-indigo-950/30 border-indigo-500/50 text-indigo-400'
+                : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+              }`}
+          >
+            <div className="flex flex-col items-start">
+              <span className="text-sm font-medium">DC1 Preset</span>
+              <span className="text-[10px] text-zinc-500">Tone curves + HSL from DC1.xmp</span>
+            </div>
+            <div className={`w-10 h-5 rounded-full relative transition-colors shrink-0 ${settings.applyLrPreset ? 'bg-indigo-600' : 'bg-zinc-800'}`}>
+              <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${settings.applyLrPreset ? 'left-6' : 'left-1'}`} />
             </div>
           </button>
         </section>

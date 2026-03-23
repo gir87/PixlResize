@@ -8,6 +8,7 @@ export interface CompressionSettings {
   longestSide: number;
   cropRatio: CropRatio;
   hasBorder: boolean;
+  applyLrPreset: boolean;
 }
 
 export interface ProcessedImage {

@@ -19,6 +19,7 @@ const DEFAULT_SETTINGS: CompressionSettings = {
   longestSide: 1920,
   cropRatio: "original",
   hasBorder: false,
+  applyLrPreset: false,
 };
 
 const PRESETS: Preset[] = [
@@ -30,7 +31,8 @@ const PRESETS: Preset[] = [
       quality: 90,
       longestSide: 1920,
       cropRatio: "original",
-      hasBorder: false
+      hasBorder: false,
+      applyLrPreset: false,
     },
   },
   {
@@ -41,7 +43,8 @@ const PRESETS: Preset[] = [
       quality: 90,
       longestSide: 1350,
       cropRatio: "1:1",
-      hasBorder: false
+      hasBorder: false,
+      applyLrPreset: false,
     },
   },
   {
@@ -52,7 +55,8 @@ const PRESETS: Preset[] = [
       quality: 90,
       longestSide: 1920,
       cropRatio: "4:5",
-      hasBorder: true
+      hasBorder: true,
+      applyLrPreset: false,
     },
   },
   {
@@ -63,7 +67,8 @@ const PRESETS: Preset[] = [
       quality: 90,
       longestSide: 2560,
       cropRatio: "19:6",
-      hasBorder: false
+      hasBorder: false,
+      applyLrPreset: false,
     },
   },
 ];

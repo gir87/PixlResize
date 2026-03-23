@@ -1,4 +1,5 @@
 import { CompressionSettings, ProcessedImage, CropRatio } from '../types';
+import { applyDC1Preset } from './lrPreset';
 
 const getCropDimensions = (width: number, height: number, ratio: CropRatio) => {
   if (ratio === 'original') return { sX: 0, sY: 0, sWidth: width, sHeight: height };
@@ -47,72 +48,70 @@ export const processImage = async (
 
     img.onload = () => {
       URL.revokeObjectURL(img.src);
-      const canvas = document.createElement('canvas');
-      const ctx = canvas.getContext('2d');
-
-      if (!ctx) {
-        reject(new Error('Failed to get canvas context'));
-        return;
-      }
 
       const { sX, sY, sWidth, sHeight } = getCropDimensions(img.width, img.height, settings.cropRatio);
-      
-      let width = sWidth;
-      let height = sHeight;
       const { longestSide, format, quality } = settings;
 
-      // Calculate new dimensions for resizing
-      if (width > height) {
-        if (width > longestSide) {
-          height = (height * longestSide) / width;
-          width = longestSide;
-        }
+      let dstW = sWidth;
+      let dstH = sHeight;
+
+      if (dstW > dstH) {
+        if (dstW > longestSide) { dstH = (dstH * longestSide) / dstW; dstW = longestSide; }
       } else {
-        if (height > longestSide) {
-          width = (width * longestSide) / height;
-          height = longestSide;
-        }
+        if (dstH > longestSide) { dstW = (dstW * longestSide) / dstH; dstH = longestSide; }
       }
 
+      // Working canvas: image pixels only (no border), so the preset applies only to photo content.
+      const imgCanvas = document.createElement('canvas');
+      imgCanvas.width  = Math.round(dstW);
+      imgCanvas.height = Math.round(dstH);
+      const imgCtx = imgCanvas.getContext('2d');
+      if (!imgCtx) { reject(new Error('Failed to get canvas context')); return; }
+
+      imgCtx.drawImage(img, sX, sY, sWidth, sHeight, 0, 0, imgCanvas.width, imgCanvas.height);
+
+      if (settings.applyLrPreset) {
+        applyDC1Preset(imgCtx, imgCanvas.width, imgCanvas.height);
+      }
+
+      // Final canvas: add border if requested.
+      const canvas = document.createElement('canvas');
+      const ctx = canvas.getContext('2d');
+      if (!ctx) { reject(new Error('Failed to get canvas context')); return; }
+
+      let finalW: number;
+      let finalH: number;
+
       if (settings.hasBorder) {
-        const borderSize = Math.round(Math.max(width, height) * 0.02);
-        const finalWidth = width + borderSize * 2;
-        const finalHeight = height + borderSize * 2;
-
-        canvas.width = finalWidth;
-        canvas.height = finalHeight;
-
+        const borderSize = Math.round(Math.max(imgCanvas.width, imgCanvas.height) * 0.02);
+        finalW = imgCanvas.width  + borderSize * 2;
+        finalH = imgCanvas.height + borderSize * 2;
+        canvas.width  = finalW;
+        canvas.height = finalH;
         ctx.fillStyle = 'white';
-        ctx.fillRect(0, 0, finalWidth, finalHeight);
-        ctx.drawImage(img, sX, sY, sWidth, sHeight, borderSize, borderSize, width, height);
-        
-        // Update width and height for the returned object
-        width = finalWidth;
-        height = finalHeight;
+        ctx.fillRect(0, 0, finalW, finalH);
+        ctx.drawImage(imgCanvas, borderSize, borderSize);
       } else {
-        canvas.width = width;
-        canvas.height = height;
-        ctx.drawImage(img, sX, sY, sWidth, sHeight, 0, 0, width, height);
+        finalW = imgCanvas.width;
+        finalH = imgCanvas.height;
+        canvas.width  = finalW;
+        canvas.height = finalH;
+        ctx.drawImage(imgCanvas, 0, 0);
       }
 
       const mimeType = `image/${format === 'jpeg' ? 'jpeg' : format}`;
-      
+
       canvas.toBlob(
         (blob) => {
-          if (!blob) {
-            reject(new Error('Failed to create blob'));
-            return;
-          }
-
-          const url = URL.createObjectURL(blob);
+          if (!blob) { reject(new Error('Failed to create blob')); return; }
           resolve({
             originalName: file.name,
             originalSize: file.size,
             processedSize: blob.size,
-            url,
+            url: URL.createObjectURL(blob),
             format,
-            width,
-            height,
+            width: finalW,
+            height: finalH,
           });
         },
         mimeType,
@@ -120,9 +119,7 @@ export const processImage = async (
       );
     };
 
-    img.onerror = () => {
-      reject(new Error('Failed to load image'));
-    };
+    img.onerror = () => reject(new Error('Failed to load image'));
   });
 };
 
