@@ -7,6 +7,7 @@ export interface CompressionSettings {
   quality: number;
   longestSide: number;
   cropRatio: CropRatio;
+  hasBorder: boolean;
 }
 
 export interface ProcessedImage {

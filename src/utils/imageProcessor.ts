@@ -74,11 +74,26 @@ export const processImage = async (
         }
       }
 
-      canvas.width = width;
-      canvas.height = height;
-      
-      // Draw cropped and resized image
-      ctx.drawImage(img, sX, sY, sWidth, sHeight, 0, 0, width, height);
+      if (settings.hasBorder) {
+        const borderSize = Math.round(Math.max(width, height) * 0.02);
+        const finalWidth = width + borderSize * 2;
+        const finalHeight = height + borderSize * 2;
+
+        canvas.width = finalWidth;
+        canvas.height = finalHeight;
+
+        ctx.fillStyle = 'white';
+        ctx.fillRect(0, 0, finalWidth, finalHeight);
+        ctx.drawImage(img, sX, sY, sWidth, sHeight, borderSize, borderSize, width, height);
+        
+        // Update width and height for the returned object
+        width = finalWidth;
+        height = finalHeight;
+      } else {
+        canvas.width = width;
+        canvas.height = height;
+        ctx.drawImage(img, sX, sY, sWidth, sHeight, 0, 0, width, height);
+      }
 
       const mimeType = `image/${format === 'jpeg' ? 'jpeg' : format}`;
       

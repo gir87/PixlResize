@@ -6,6 +6,7 @@ import {
   X,
   Heart,
   Coffee,
+  Square,
 } from "lucide-react";
 import { CompressionSettings, OutputFormat, Preset, CropRatio } from "../types";
 
@@ -100,11 +101,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
                   <button
                     key={f}
                     onClick={() => handleFormatChange(f)}
-                    className={`py-2 text-xs font-medium rounded-md border transition-all ${
-                      settings.format === f
+                    className={`py-2 text-xs font-medium rounded-md border transition-all ${settings.format === f
                         ? "bg-indigo-600 border-indigo-600 text-white shadow-sm"
                         : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
-                    }`}
+                      }`}
                   >
                     {f.toUpperCase()}
                   </button>
@@ -163,11 +163,10 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <button
                 key={ratio.value}
                 onClick={() => handleCropChange(ratio.value)}
-                className={`py-2 text-xs font-medium rounded-md border transition-all ${
-                  settings.cropRatio === ratio.value
+                className={`py-2 text-xs font-medium rounded-md border transition-all ${settings.cropRatio === ratio.value
                     ? "bg-indigo-600 border-indigo-600 text-white shadow-sm"
                     : "bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200"
-                }`}
+                  }`}
               >
                 {ratio.label}
               </button>
@@ -176,6 +175,25 @@ export const Sidebar: React.FC<SidebarProps> = ({
           <p className="text-[10px] text-zinc-500 italic">
             Portrait/Landscape orientation is automatically detected.
           </p>
+        </section>
+
+        <section className="space-y-4">
+          <div className="flex items-center gap-2 text-zinc-500">
+            <Square className="w-4 h-4" />
+            <h2 className="text-xs font-semibold uppercase tracking-wider">Border</h2>
+          </div>
+          <button
+            onClick={() => setSettings({ ...settings, hasBorder: !settings.hasBorder })}
+            className={`w-full flex items-center justify-between p-3 rounded-lg border transition-all ${settings.hasBorder
+                ? 'bg-indigo-950/30 border-indigo-500/50 text-indigo-400'
+                : 'bg-zinc-900 border-zinc-800 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
+              }`}
+          >
+            <span className="text-sm font-medium">White Border (2%)</span>
+            <div className={`w-10 h-5 rounded-full relative transition-colors ${settings.hasBorder ? 'bg-indigo-600' : 'bg-zinc-800'}`}>
+              <div className={`absolute top-1 w-3 h-3 bg-white rounded-full transition-all ${settings.hasBorder ? 'left-6' : 'left-1'}`} />
+            </div>
+          </button>
         </section>
 
         <section className="space-y-4">
@@ -190,18 +208,16 @@ export const Sidebar: React.FC<SidebarProps> = ({
               <button
                 key={preset.id}
                 onClick={() => applyPreset(preset)}
-                className={`flex flex-col items-start p-3 text-left border rounded-lg transition-all group ${
-                  JSON.stringify(settings) === JSON.stringify(preset.settings)
+                className={`flex flex-col items-start p-3 text-left border rounded-lg transition-all group ${JSON.stringify(settings) === JSON.stringify(preset.settings)
                     ? "bg-indigo-950/30 border-indigo-500/50"
                     : "bg-zinc-900 border-zinc-800 hover:border-zinc-700"
-                }`}
+                  }`}
               >
                 <span
-                  className={`text-sm font-medium ${
-                    JSON.stringify(settings) === JSON.stringify(preset.settings)
+                  className={`text-sm font-medium ${JSON.stringify(settings) === JSON.stringify(preset.settings)
                       ? "text-indigo-400"
                       : "text-zinc-200"
-                  }`}
+                    }`}
                 >
                   {preset.name}
                 </span>
