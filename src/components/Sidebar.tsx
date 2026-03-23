@@ -223,7 +223,7 @@ export const Sidebar: React.FC<SidebarProps> = ({
                 </span>
                 <span className="text-[10px] text-zinc-500">
                   {preset.settings.format.toUpperCase()} • Q:
-                  {preset.settings.quality} • {preset.settings.longestSide}px
+                  {preset.settings.quality} • {preset.settings.longestSide}px{preset.settings.hasBorder ? " • Border" : ""}
                 </span>
               </button>
             ))}
